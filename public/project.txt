@@ -1,0 +1,207 @@
+To-Do List Section:
+Objective: Provide users with a clear set of actionable tasks related to incident management.
+Features:
+Display four common tasks with status indicators (Red, Yellow, Green).
+Each task represents frequent actions users take during incident management.
+Magic Checks Section:
+Objective: Offer context-specific automated checks to expedite incident resolution.
+Features:
+Show two tailored checks based on the incident type (e.g., Authentication issues).
+Incorporate icons (Lightning or Magic) to differentiate from regular tasks.
+Indicate the loading and completion status of these checks.
+User Experience Enhancements:
+Simplicity: Ensure the new sections are intuitive and seamlessly integrate with the existing layout.
+Visual Appeal: Use consistent styling with existing components, leveraging Tailwind CSS for aesthetics.
+Interactivity: While mock data will be used, design the sections to mimic real interactions, signaling readiness for dynamic integrations.
+Implementation Steps:
+Identify Placement:
+Place the To-Do List and Magic Checks sections beneath the Feature Cards or within the Active Incidents area for contextual relevance.
+Design Layout:
+Use grid or flexbox layouts to organize tasks and checks neatly.
+Incorporate status indicators (colored dots) and relevant icons for clarity.
+Create Mock Data:
+Define static data for tasks and magic checks to simulate dynamic behavior.
+Assign statuses (Red, Yellow, Green) to tasks to represent progress or priority.
+Develop Components:
+Build reusable components for tasks and magic checks to maintain consistency.
+Ensure accessibility and responsiveness across different device sizes.
+Integrate with Existing Dashboard:
+Embed the new sections within the DashboardComponent, ensuring no conflicts with existing functionalities.
+Maintain the overall design language and user flow.
+Testing and Iteration:
+Review the layout for visual consistency and usability.
+Iterate based on feedback to refine the features further.
+By following this plan, you'll demonstrate a clear understanding of user needs, alignment with Rootly's product goals, and your ability to enhance the user experience effectively.
+Implementation: Enhancing dashboard.tsx
+Below, you'll find the code modifications to implement the To-Do List and Magic Checks sections within the DashboardComponent. These additions are designed to be cohesive with the existing dashboard structure, leveraging Tailwind CSS for styling and ensuring ease of integration.
+Adding To-Do List and Magic Checks
+'uses client'
+
+import { AlertCircle, ArrowUpRight, BarChart2, Bell, BookOpen, ChevronDown, Clock, HelpCircle, Home, Link2, MessageSquare, RefreshCcw, Search, Settings, Share2, Sliders, Zap, Lightning, Magic } from "lucide-react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+
+interface Task {
+  id: number;
+  title: string;
+  status: 'red' | 'yellow' | 'green';
+}
+
+interface MagicCheck {
+  id: number;
+  title: string;
+  type: 'auth' | 'server';
+  status: 'loading' | 'completed';
+}
+
+const mockTasks: Task[] = [
+  { id: 1, title: 'Verify Incident Details', status: 'green' },
+  { id: 2, title: 'Notify Team Members', status: 'yellow' },
+  { id: 3, title: 'Assess Impact', status: 'red' },
+  { id: 4, title: 'Update Incident Log', status: 'green' },
+];
+
+const mockMagicChecks: MagicCheck[] = [
+  { id: 1, title: 'Check OAuth Token Logic', type: 'auth', status: 'loading' },
+  { id: 2, title: 'Review Serverless Functions', type: 'server', status: 'completed' },
+];
+
+export function DashboardComponent() {
+  return (
+    <div className="flex h-screen bg-white text-sm">
+      {/* Sidebar */}
+      <aside className="w-56 bg-white p-4 flex flex-col border-r border-gray-200 overflow-y-auto">
+        {/* ...existing sidebar content... */}
+      </aside>
+
+      {/* Main content */}
+      <main className="flex-1 overflow-auto">
+        {/* Trial banner */}
+        <div className="bg-yellow-50 border-b border-yellow-100 py-2 px-4">
+          {/* ...existing trial banner content... */}
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          {/* Header */}
+          <div className="flex justify-between items-center mb-6">
+            {/* ...existing header content... */}
+          </div>
+
+          {/* Feature cards */}
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            {/* ...existing feature cards... */}
+          </div>
+
+          {/* To-Do List */}
+          <div className="mb-6">
+            <h2 className="text-base font-semibold mb-3">To-Do List</h2>
+            <Card className="border border-gray-200 shadow-sm">
+              <CardContent className="p-4">
+                <ul>
+                  {mockTasks.map(task => (
+                    <li key={task.id} className="flex items-center mb-2">
+                      <span className={`h-2 w-2 rounded-full mr-2 ${task.status === 'red' ? 'bg-red-500' : task.status === 'yellow' ? 'bg-yellow-500' : 'bg-green-500'}`}></span>
+                      <span>{task.title}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Magic Checks */}
+          <div className="mb-6">
+            <h2 className="text-base font-semibold mb-3">Magic Checks</h2>
+            <Card className="border border-gray-200 shadow-sm">
+              <CardContent className="p-4">
+                <ul>
+                  {mockMagicChecks.map(check => (
+                    <li key={check.id} className="flex items-center mb-2">
+                      <span className="mr-2">
+                        {check.type === 'auth' ? <Lightning className="h-4 w-4 text-blue-500" /> : <Magic className="h-4 w-4 text-purple-500" />}
+                      </span>
+                      <span>{check.title}</span>
+                      <span className="ml-auto">
+                        {check.status === 'loading' ? (
+                          <span className="text-yellow-500">Loading...</span>
+                        ) : (
+                          <span className="text-green-500">Completed</span>
+                        )}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Active Incidents */}
+          <div className="mb-6">
+            {/* ...existing active incidents content... */}
+          </div>
+
+          {/* Incident Insights */}
+          <div>
+            {/* ...existing incident insights content... */}
+          </div>
+        </div>
+      </main>
+    </div>
+  )
+}
+
+Explanation of Enhancements
+Data Structures:
+Interfaces: Defined Task and MagicCheck interfaces to type the mock data for clarity and type safety.
+Mock Data: Created mockTasks and mockMagicChecks arrays containing static data representing typical tasks and context-specific checks.
+To-Do List Section:
+Header: Added a heading "To-Do List" to denote the section.
+Card Container: Utilized the existing Card and CardContent components for consistent styling.
+List Rendering: Iterated over mockTasks to display each task with a colored status indicator:
+Status Indicators: Used conditional Tailwind CSS classes to set the color based on the task's status (red, yellow, green).
+Task Titles: Displayed the title of each task alongside its status.
+Magic Checks Section:
+Header: Added a heading "Magic Checks" to denote the section.
+Card Container: Similarly used Card and CardContent components.
+List Rendering: Iterated over mockMagicChecks to display each check with relevant icons and status:
+Icons: Used Lightning and Magic icons from lucide-react to differentiate the type of check (auth vs. server).
+Check Titles: Displayed the title of each magic check.
+Status Indicators: Indicated the loading or completion status with colored text.
+Styling and Layout:
+Margin and Padding: Ensured adequate spacing using Tailwind CSS classes like mb-6, p-4, and mr-2 for visual separation and readability.
+Flexbox: Leveraged flexbox properties (flex, items-center, ml-auto) to align items neatly within each list item.
+Visual Representation
+The enhancements introduce two new sections below the existing feature cards:
+To-Do List:
+Displays four common tasks each with a colored dot indicating priority or completion status.
+Example:
+     ● Verify Incident Details
+     ● Notify Team Members
+     ● Assess Impact
+     ● Update Incident Log
+
+Magic Checks:
+Showcases two automated, context-specific checks with relevant icons.
+Example:
+     ⚡ Check OAuth Token Logic       Loading...
+     ✨ Review Serverless Functions     Completed
+
+These additions aim to provide users with actionable items and intelligent assistance, aligning with Rootly's goal of making incident management efficient and "magical."
+Next Steps
+Prototype Development:
+Implement the above code enhancements in a development environment.
+Ensure that the new sections render correctly and integrate seamlessly with existing components.
+User Feedback:
+Share the prototype with peers or mentors to gather feedback on usability and design.
+Iterate on the design based on the feedback to refine the user experience.
+Presentation to Rootly:
+Prepare a concise presentation or email showcasing the prototype.
+Highlight how these features align with Rootly's objectives and enhance the user experience.
+Emphasize your proactive approach and eagerness to contribute to their engineering team.
+Further Learning:
+Since your dad recommended researching ITIL, consider studying the ITIL framework to deepen your understanding of incident management lifecycles.
+Explore resources on RAG models and foundational AI/ML concepts to build confidence in those areas.
+By taking these steps, you'll present yourself as a well-prepared and proactive candidate, ready to contribute meaningfully to Rootly's mission.
