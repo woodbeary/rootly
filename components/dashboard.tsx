@@ -24,55 +24,66 @@ export function DashboardComponent() {
   // Add this new component
   const IncidentView = ({ incident }: { incident: IncidentData }) => {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Breadcrumb and Status */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-sm text-gray-600">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2 text-sm text-gray-600 overflow-x-auto pb-2 sm:pb-0">
             <Button 
               variant="ghost" 
               onClick={() => setSelectedIncidentId(null)}
-              className="text-sm p-0 h-auto hover:bg-transparent"
+              className="text-sm p-0 h-auto hover:bg-transparent flex-shrink-0"
             >
               Home
             </Button>
             <span>/</span>
-            <span>Incidents</span>
+            <span className="flex-shrink-0">Incidents</span>
             <span>/</span>
-            <span className="text-gray-900">{incident.title}</span>
+            <span className="text-gray-900 truncate">{incident.title}</span>
           </div>
-          <div className="flex items-center gap-3">
-            <Button variant="outline" className="text-sm">
+          <div className="flex items-center gap-2">
+            <Button variant="outline" className="text-sm flex-shrink-0">
               <span className="relative flex h-2 w-2 mr-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
               </span>
               Active
             </Button>
-            <Button variant="outline" className="text-sm">
+            <Button variant="outline" className="text-sm flex-shrink-0">
               Edit
             </Button>
-            <Button variant="outline" className="text-sm p-2">
-              <Bell className="h-4 w-4" />
-            </Button>
-            <Button variant="outline" className="text-sm p-2">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="text-sm p-2">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem>
+                  <Bell className="h-4 w-4" />
+                  Notifications
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Share2 className="h-4 w-4" />
+                  Share
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
 
         {/* Title and ID */}
         <div className="flex items-center gap-2">
-          <h1 className="text-xl font-semibold">{incident.title}</h1>
+          <h1 className="text-lg sm:text-xl font-semibold truncate">{incident.title}</h1>
           <span className="text-sm text-gray-500">#{incident.id.slice(0, 4)}</span>
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Timeline and Details */}
-          <div className="col-span-2 space-y-6">
-            {/* Tabs */}
-            <div className="border-b">
-              <div className="flex gap-6">
+          <div className="lg:col-span-2 space-y-6">
+            {/* Tabs - Scrollable on mobile */}
+            <div className="border-b overflow-x-auto">
+              <div className="flex gap-6 min-w-max">
                 {['Timeline', 'Tasks', 'Follow-ups', 'Status Page', 'Retrospective'].map((tab) => (
                   <Button
                     key={tab}
@@ -89,12 +100,12 @@ export function DashboardComponent() {
 
             {/* Timeline Content */}
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <Switch id="systemEvents" />
                   <Label htmlFor="systemEvents">Include System Events</Label>
                 </div>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" className="w-full sm:w-auto">
                   <Download className="h-4 w-4 mr-2" />
                   Export
                 </Button>
@@ -103,13 +114,13 @@ export function DashboardComponent() {
               {/* Timeline Events */}
               <div className="space-y-4">
                 <div className="flex gap-3">
-                  <Avatar className="h-8 w-8">
+                  <Avatar className="h-8 w-8 flex-shrink-0">
                     <AvatarImage src="/avatar.png" />
                     <AvatarFallback>JL</AvatarFallback>
                   </Avatar>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                      <p className="text-sm truncate">
                         <span className="font-medium">Jacob Lopez</span> created this incident
                       </p>
                       <time className="text-sm text-gray-500">
@@ -123,7 +134,7 @@ export function DashboardComponent() {
           </div>
 
           {/* Right Column - Metadata */}
-          <div className="space-y-6">
+          <div className="space-y-6 bg-gray-50 p-4 rounded-lg lg:bg-transparent lg:p-0">
             {/* Severity */}
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Severity</span>
@@ -136,8 +147,8 @@ export function DashboardComponent() {
             <div>
               <span className="text-sm font-medium">Started At</span>
               <div className="flex items-center gap-2 mt-1">
-                <Calendar className="h-4 w-4 text-gray-500" />
-                <span className="text-sm">
+                <Calendar className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                <span className="text-sm truncate">
                   {format(incident.createdAt, "MMM d 'at' h:mm a")}
                 </span>
               </div>
