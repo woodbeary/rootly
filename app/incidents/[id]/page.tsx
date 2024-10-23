@@ -21,6 +21,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default function IncidentPage() {
+export default function IncidentPage({params}: {params: {id: string}}) {
   return <DashboardComponent />
 }
